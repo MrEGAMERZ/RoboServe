@@ -417,7 +417,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👥 Authors
 
-- **Your Name** - *Initial work* - [@yourgithub](https://github.com/yourgithub)
+- **Your Name** - *Initial work* - [@MrEGAMERZ](https://github.com/MrEGAMERZ)
 
 ---
 
@@ -432,9 +432,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact
 
-- **Email**: your.email@example.com
-- **Project Link**: https://github.com/yourusername/RoboServe
-- **Demo Video**: [YouTube Link]
+- **Email**: mohammadrehan432432@gmail.com
+- **Project Link**: https://github.com/MrEGAMERZ/RoboServe
+- **Demo Video**: [[YouTube Link]](https://youtu.be/SfOplXveABE?si=HYPNmYnsvF1Ss-IX)
 
 ---
 
@@ -446,7 +446,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**Made with ❤️ by [Your Name]**
+**Made with ❤️ by Mohammad Rehan And Team**
 
 If this project helped you, please consider giving it a ⭐!
 
