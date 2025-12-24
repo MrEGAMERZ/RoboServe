@@ -15,7 +15,7 @@
 
 ---
 
-## 📖 Overview
+##  Overview
 
 RoboServe is a complete restaurant automation system combining:
 - **Autonomous Robot** - Line following with obstacle avoidance
@@ -23,29 +23,28 @@ RoboServe is a complete restaurant automation system combining:
 - **iOS App** - Customer ordering and kitchen management
 - **ESP-NOW Communication** - Real-time wireless control
 
-## ✨ Features
+##  Features
 
-### 🤖 Robot Features
-- ✅ Line following with 3 IR sensors
-- ✅ Obstacle detection using ultrasonic sensor
-- ✅ AI-powered table recognition (Edge Impulse)
-- ✅ ESP-NOW wireless communication
-- ✅ Physical button resume system
-- ✅ LED status indicators
+###  Robot Features
+- Line following with 3 IR sensors
+- Obstacle detection using ultrasonic sensor
+- AI-powered table recognition (Edge Impulse)
+- Physical button resume system
+- LED status indicators
 
-### 📱 iOS App Features
-- ✅ Table-based ordering system
-- ✅ Real-time menu browsing
-- ✅ Kitchen order management
-- ✅ Firebase Firestore integration
-- ✅ Multiple order status tracking
-- ✅ Built-in games for customers
+###  iOS App Features
+- Table-based ordering system
+- Real-time menu browsing
+- Kitchen order management
+- Firebase Firestore integration
+- Multiple order status tracking
+- Built-in games for customers
 
 ### 🧠 AI/ML Features
-- ✅ On-device inference (no cloud needed)
-- ✅ Custom trained Edge Impulse model
-- ✅ 85%+ detection accuracy
-- ✅ Real-time table identification
+- On-device inference (no cloud needed)
+- Custom trained Edge Impulse model
+- 85%+ detection accuracy
+- Real-time table identification
 
 ---
 
@@ -63,7 +62,7 @@ RoboServe is a complete restaurant automation system combining:
 
 ---
 
-## 🛠️ Hardware
+##  Hardware
 
 ### Components List
 
@@ -118,7 +117,7 @@ Communication: ESP-NOW
 
 ---
 
-## 💻 Software Architecture
+## Software Architecture
 
 ### System Architecture
 ```
@@ -158,9 +157,9 @@ Communication: ESP-NOW
 └─────────────────────────────────────────┘
 ```
 
----
+------
 
-## 🚀 Setup
+##  Setup
 
 ### Prerequisites
 - Arduino IDE 2.0+
@@ -169,7 +168,7 @@ Communication: ESP-NOW
 - Xcode 14+ (for iOS app)
 - Firebase project setup
 
-### 1️⃣ Hardware Assembly
+### Hardware Assembly
 
 1. **Assemble robot chassis** with 4 motors
 2. **Connect L298N motor drivers** to ESP32 DevKit
@@ -178,7 +177,7 @@ Communication: ESP-NOW
 5. **Wire button** between GPIO 16 and GND
 6. **Connect power supply** (separate for motors and ESP32s)
 
-### 2️⃣ Arduino Setup (Robot)
+### Arduino Setup (Robot)
 
 ```bash
 # Install Arduino IDE
@@ -199,7 +198,7 @@ https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32
 6. Select board: `AI Thinker ESP32-CAM`
 7. Upload (hold BOOT button)
 
-### 3️⃣ Edge Impulse Model Training
+### Edge Impulse Model Training
 
 1. Create account at [edgeimpulse.com](https://edgeimpulse.com)
 2. Create new project
@@ -212,7 +211,7 @@ https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32
 6. Add library to Arduino IDE
 7. Update `#include` statement in ESP32-CAM code
 
-### 4️⃣ iOS App Setup
+### iOS App Setup
 
 ```bash
 # Navigate to iOS app directory
@@ -232,7 +231,7 @@ open FoodOrdering.xcodeproj
 4. Enable Firestore Database
 5. Set up authentication (if needed)
 
-### 5️⃣ Testing
+### Testing
 
 1. **Test ESP-NOW communication**
    - Upload both ESP32 codes
@@ -253,7 +252,7 @@ open FoodOrdering.xcodeproj
    - Place test order
    - Verify Firebase integration
 
----
+------
 
 ## 📁 Repository Structure
 
@@ -409,19 +408,19 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 👥 Authors
+## Authors
 
 - **Your Name** - *Initial work* - [@MrEGAMERZ](https://github.com/MrEGAMERZ)
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Edge Impulse for embedded ML platform
 - ESP32 community for excellent documentation
