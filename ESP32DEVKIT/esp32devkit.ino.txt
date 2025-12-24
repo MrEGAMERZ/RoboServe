@@ -1,0 +1,199 @@
+/*
+ * ESP32 DEVKIT V1 - FINAL STRAIGHT LINE ROBOT
+ * IR SENSOR: GPIO15
+ * SPEED: 230
+ * STRAIGHT ONLY 
+ * STOP on:
+ *  - NO LINE
+ *  - OBSTACLE
+ *  - TABLE DETECTED FROM ESP32-CAM (WIRED UART)
+ * BUTTON RESUME
+ * LED INDICATES TABLE DETECTED
+ */
+
+#include <Arduino.h>
+
+//UART FROM ESP32-CAM
+#define CAM_RX 16  
+
+// MOTOR PINS
+#define ENA1 18
+#define IN1_1 21
+#define IN2_1 22
+
+#define ENA2 19
+#define IN1_2 23
+#define IN2_2 5
+
+#define ENB1 25
+#define IN3_1 26
+#define IN4_1 27
+
+#define ENB2 32
+#define IN3_2 14
+#define IN4_2 4
+
+const int freq = 5000;
+const int resolution = 8;
+
+//SENSORS
+#define IR_CENTER 15
+#define ULTRASONIC_TRIG 13
+#define ULTRASONIC_ECHO 12
+
+//BUTTON & LED
+#define RESUME_BUTTON 33
+#define STATUS_LED 2   
+
+//STATE
+enum RobotState {
+  RUNNING,
+  STOPPED_AT_TABLE
+};
+
+RobotState currentState = RUNNING;
+
+//SPEED
+const int MOTOR_SPEED = 230;
+
+unsigned long lastButtonCheck = 0;
+const int BUTTON_DEBOUNCE = 50;
+
+// FUNCTION DECL 
+void forwardAll();
+void stopAll();
+int getUltrasonic();
+bool isButtonPressed();
+
+//SETUP 
+void setup() {
+  Serial.begin(115200);
+  Serial2.begin(115200, SERIAL_8N1, CAM_RX, -1);
+  delay(1000);
+
+  pinMode(RESUME_BUTTON, INPUT_PULLUP);
+  pinMode(STATUS_LED, OUTPUT);
+  digitalWrite(STATUS_LED, LOW); // LED OFF initially
+
+  pinMode(IN1_1, OUTPUT); pinMode(IN2_1, OUTPUT);
+  pinMode(IN1_2, OUTPUT); pinMode(IN2_2, OUTPUT);
+  pinMode(IN3_1, OUTPUT); pinMode(IN4_1, OUTPUT);
+  pinMode(IN3_2, OUTPUT); pinMode(IN4_2, OUTPUT);
+
+  ledcAttach(ENA1, freq, resolution);
+  ledcAttach(ENA2, freq, resolution);
+  ledcAttach(ENB1, freq, resolution);
+  ledcAttach(ENB2, freq, resolution);
+
+  pinMode(IR_CENTER, INPUT_PULLUP);
+  pinMode(ULTRASONIC_TRIG, OUTPUT);
+  pinMode(ULTRASONIC_ECHO, INPUT);
+
+  stopAll();
+  Serial.println("✅ ROBOT READY - TABLE LED ENABLED");
+}
+
+//LOOP
+void loop() {
+
+  //READ FROM ESP32-CAM
+  if (Serial2.available()) {
+    String msg = Serial2.readStringUntil('\n');
+    msg.trim();
+    msg.toUpperCase();
+
+    Serial.print("CAM → ");
+    Serial.println(msg);
+
+    if (msg.indexOf("TABLE") != -1) {
+      Serial.println("🛑 TABLE DETECTED → STOPPING ROBOT");
+      currentState = STOPPED_AT_TABLE;
+      stopAll();
+      digitalWrite(STATUS_LED, HIGH);
+      delay(200);
+      return;
+    }
+  }
+
+  //STOP STATE
+  if (currentState == STOPPED_AT_TABLE) {
+    stopAll();
+    if (isButtonPressed()) {
+      Serial.println("▶ BUTTON PRESSED → RESUME");
+      currentState = RUNNING;
+      digitalWrite(STATUS_LED, LOW);
+      delay(300);
+    }
+    return;
+  }
+
+  //OBSTACLE CHECK
+  int distance = getUltrasonic();
+  if (distance > 0 && distance < 25) {
+    stopAll();
+    return;
+  }
+
+  //STRAIGHT LINE FOLLOW
+  if (digitalRead(IR_CENTER) == HIGH) {
+    forwardAll();
+  } else {
+    stopAll();
+  }
+}
+
+// BUTTON
+bool isButtonPressed() {
+  if (millis() - lastButtonCheck < BUTTON_DEBOUNCE) return false;
+
+  if (digitalRead(RESUME_BUTTON) == LOW) {
+    lastButtonCheck = millis();
+    while (digitalRead(RESUME_BUTTON) == LOW) delay(10);
+    return true;
+  }
+  return false;
+}
+
+// MOTOR CONTROL 
+void forwardAll() {
+
+  digitalWrite(IN1_1, LOW);
+  digitalWrite(IN2_1, HIGH);
+  ledcWrite(ENA1, MOTOR_SPEED);
+
+  digitalWrite(IN1_2, HIGH);
+  digitalWrite(IN2_2, LOW);
+  ledcWrite(ENA2, MOTOR_SPEED);
+
+  digitalWrite(IN3_1, LOW);
+  digitalWrite(IN4_1, HIGH);
+  ledcWrite(ENB1, MOTOR_SPEED);
+
+  digitalWrite(IN3_2, HIGH);
+  digitalWrite(IN4_2, LOW);
+  ledcWrite(ENB2, MOTOR_SPEED);
+}
+
+void stopAll() {
+  ledcWrite(ENA1, 0);
+  ledcWrite(ENA2, 0);
+  ledcWrite(ENB1, 0);
+  ledcWrite(ENB2, 0);
+
+  digitalWrite(IN1_1, LOW); digitalWrite(IN2_1, LOW);
+  digitalWrite(IN1_2, LOW); digitalWrite(IN2_2, LOW);
+  digitalWrite(IN3_1, LOW); digitalWrite(IN4_1, LOW);
+  digitalWrite(IN3_2, LOW); digitalWrite(IN4_2, LOW);
+}
+
+// ULTRASONIC
+int getUltrasonic() {
+  digitalWrite(ULTRASONIC_TRIG, LOW);
+  delayMicroseconds(2);
+  digitalWrite(ULTRASONIC_TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(ULTRASONIC_TRIG, LOW);
+
+  long duration = pulseIn(ULTRASONIC_ECHO, HIGH, 30000);
+  return duration * 0.034 / 2;
+}
